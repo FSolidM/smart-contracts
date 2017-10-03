@@ -5,10 +5,11 @@ First, install the following:
 - [NodeJS](https://nodejs.org/en/download/) (v4.x.x recommended)
 - [MongoDB](https://www.mongodb.com/download-center#production)
 
-Install the command line interface version of webgme globally to your operating system:
-```
-npm install -g webgme-cli
-```
+Next, install packages with npm globally in your operating system:
+ ```
+ npm install
+ npm install -g webgme
+ ```
 (If you run `whereis webgme`, it should give you a location for the executable.)
 
 To clone the repository, first install (if necessary):
