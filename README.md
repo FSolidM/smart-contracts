@@ -8,7 +8,7 @@ First, install the following:
 Then, clone the `smart contracts` repository and install packages with npm:
 ```
 npm install
-npm instal webgme
+npm install webgme
 ```
 Start MongoDB locally by running the `mongod` executable in your mongodb installation (you may need to create a `data` directory or set `--dbpath`).
 
