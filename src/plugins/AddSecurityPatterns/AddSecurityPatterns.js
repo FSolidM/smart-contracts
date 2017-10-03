@@ -14,7 +14,8 @@ define([
     'q',
     'common/util/ejs',
     'scsrc/util/utils',
-    'scsrc/templatesWithPatterns/ejsCache'
+    'scsrc/templatesWithPatterns/ejsCache',
+    'scsrc/parsers/solidityExtra'
 ], function (
     PluginConfig,
     pluginMetadata,
@@ -22,7 +23,8 @@ define([
     Q,
     ejs,
     utils,
-    ejsCache) {
+    ejsCache,
+    solidityParser) {
     'use strict';
 
     pluginMetadata = JSON.parse(pluginMetadata);
@@ -167,16 +169,24 @@ define([
 
         return utils.getModelOfContract(self.core, contractNode)
             .then(function (contractModel) {
-              //TODO: add input from widget to contractModel
+                var currentConfig = self.getCurrentConfig(),
+                info = {
+                  locking: currentConfig['locking'],
+                  counter: currentConfig['counter'],
+                  timedTransitions: currentConfig['timedTransitions'],
+                  accessControl: currentConfig['accessControl'],
+                  events: currentConfig['events']
+                };
+                Object.assign(contractModel, currentConfig);
                 fileContent = ejs.render(ejsCache.contractType.complete, contractModel);
-                //Need to change this for a Javascript file.
-                //var parseResult = javaParser.checkWholeFile(fileContent);
-                //if (parseResult) {
-                    //self.logger.debug(parseResult.line);
-                    //self.logger.debug(parseResult.message);
-                    //parseResult.node = componentTypeNode;
-                    //violations.push(parseResult);
-                //}
+
+                var parseResult = solidityParser.checkWholeFile(fileContent);
+                if (parseResult) {
+                    self.logger.debug(parseResult.line);
+                    self.logger.debug(parseResult.message);
+                    parseResult.node = contractNode;
+                    violations.push(parseResult);
+                }
                 return fileContent;
             })
             .nodeify(callback);
@@ -256,6 +266,13 @@ define([
                     message: 'Transition [' + childName + '] with no source encountered. Please connect or remove it.'
                 });
             }
+
+            if (!self.core.getAttribute(child, 'tags').match(/^(payable|admin|event|\s|)+$/)){
+              nameAndViolations.violations.push({
+                  node: child,
+                  message: 'Transition [' + childName + '] has invalid tags. Tags can only be any combination of "payable", "admin", and "event".'
+              });
+            }
         }
         if (self.isMetaTypeOf(child, self.META.Transition)) {
 
@@ -272,12 +289,21 @@ define([
         return nameAndViolations;
     };
 
-    // AddSecurityPatterns.prototype.generateTestInfo = function () {
-    //   var self = this,
-    //   currentConfig = this.getCurrentConfig(),
-    //
-    //   return currentConfig;
-    // };
+    //  AddSecurityPatterns.prototype.generatePluginInfo = function () {
+    //    var self = this,
+    //        currentConfig = this.getCurrentConfig(),
+    //        info = {
+    //          locking: currentConfig['locking'],
+    //          counter: currentConfig['counter'],
+    //          timedTransitions: currentConfig['timedTransitions'],
+    //          accessControl: currentConfig['accessControl'],
+    //          events: currentConfig['events']
+    //        };
+    //         console.log(currentConfig['locking']);
+    //         console.log(info.locking);
+     //
+    //    return info;
+    //  };
 
 return AddSecurityPatterns;
 
