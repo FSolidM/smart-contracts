@@ -5,13 +5,6 @@ First, install the following:
 - [NodeJS](https://nodejs.org/en/download/) (v4.x.x recommended)
 - [MongoDB](https://www.mongodb.com/download-center#production)
 
-Next, install packages with npm globally in your operating system:
- ```
- npm install
- npm install -g webgme
- ```
-(If you run `whereis webgme`, it should give you a location for the executable.)
-
 To clone the repository, first install (if necessary):
 - [Git](https://git-scm.com/downloads)
 
@@ -27,12 +20,13 @@ Install packages with npm in the project root (`smart-contracts`):
 cd /home/$USER/smart-contracts
 npm install
 npm install webgme
+bower install
 ```
 Start mongodb locally by running the `mongod` executable in your mongodb installation (you may need to create a `data` directory or set `--dbpath`). For example:
 ```
 cd /home/$USER
-mkdir bip_data
-mongod --dbpath ./bip_data
+mkdir sc_data
+mongod --dbpath ./sc_data
 ```
 wait until you see a line that says "[initandlisten] waiting for connections on port 27017".
 
