@@ -5,8 +5,6 @@ First, install the following:
 - [NodeJS](https://nodejs.org/en/download/) (v4.x.x recommended)
 - [MongoDB](https://www.mongodb.com/download-center#production)
 
-On Ubuntu, you also need to install `npm` and `nodes-legacy` using `apt`.
-
 To clone the repository, first install (if necessary):
 - [Git](https://git-scm.com/downloads)
 
